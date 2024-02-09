@@ -1,0 +1,155 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  salary        Int?
+
+  comments          Comment[]
+  salaryRanges      UsersWithinSalaryRange[]
+  bookmarkedThreads BookmarkedThread[]
+  likes             LikeComment[]
+}
+
+model SalaryRange {
+  id            String    @id @default(cuid())
+  min Int
+  max Int?
+
+  threads Thread[]
+  users   UsersWithinSalaryRange[]
+}
+
+model UsersWithinSalaryRange {
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  salaryRangeId String
+  salaryRange   SalaryRange @relation(fields: [salaryRangeId], references: [id])
+
+  @@id([userId, salaryRangeId])
+  @@index([userId])
+  @@index([salaryRangeId])
+}
+
+model Thread {
+  id               Int                @id @default(autoincrement())
+  salaryRangeId    String
+  salaryRange      SalaryRange        @relation(fields: [salaryRangeId], references: [id])
+  genreId          Int
+  genre            Genre              @relation(fields: [genreId], references: [id])
+  initialCommentId Int                @unique
+  initialComment   Comment            @relation(fields: [initialCommentId], references: [id])
+  title            String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  bookmarkedBy     BookmarkedThread[]
+
+  @@index([salaryRangeId])
+  @@index([genreId])
+  @@index([initialCommentId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  thread    Thread?
+  isInitial Boolean  @default(false)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  toCommentId Int?
+  toComment   Comment?  @relation("CommentToComment", fields: [toCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies     Comment[] @relation("CommentToComment")
+
+  likes     LikeComment[]
+
+  @@index([userId])
+  @@index([toCommentId])
+}
+
+model Genre {
+  id   Int    @id
+  name String
+
+  threads Thread[]
+}
+
+model BookmarkedThread {
+  userId    String
+  user   User   @relation(fields: [userId], references: [id])
+  threadId  Int
+  thread Thread @relation(fields: [threadId], references: [id])
+  createdAt DateTime @default(now())
+
+
+  @@id([userId, threadId])
+  @@index([userId])
+  @@index([threadId])
+}
+
+model LikeComment {
+  userId    String
+  user    User    @relation(fields: [userId], references: [id])
+  commentId Int
+  comment Comment @relation(fields: [commentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([userId, commentId])
+  @@index([userId])
+  @@index([commentId])
+}
