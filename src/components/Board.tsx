@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Threads from './Threads';
 import PostButton from './PostButton';
@@ -14,6 +16,7 @@ type BoardProps = {
 };
 
 const Board: React.FC<BoardProps> = ({ posts }) => {
+  const [isShown, setIsShown] = React.useState(false);
   return (
     <div className='relative'>
       <Threads 
@@ -84,7 +87,9 @@ const Board: React.FC<BoardProps> = ({ posts }) => {
             favs: 0,
         }
       ]} />
-      <PostButton />
+      <PostButton handleClick={() => {
+        setIsShown(true);
+      }}/>
     </div>
   );
 };
