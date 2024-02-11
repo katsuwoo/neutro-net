@@ -5,14 +5,11 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
 const Layout: React.FC<{ children: React.ReactNode }> = async ({ children }) => {
-  // const session = await getServerSession(authOptions);
-  // if (!session) {
-  //   console.log("session is null")
-  //   redirect("/api/auth/signin")
-  // } else {
-  //   console.log("通過")
-  //   console.log(session)
-  // }
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    console.log("session is null")
+    redirect("/")
+  }
   return (
     <div className='max-w-3xl min-w-80 flex flex-col min-h-screen mx-auto'>
       <header>
@@ -26,8 +23,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = async ({ children }) => 
       <main className='h-[calc(100vh-54px)]'>
         {children}
       </main>
-      {/* <footer>
-      </footer> */}
     </div>
   );
 };

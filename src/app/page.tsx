@@ -2,25 +2,39 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { getServerSession } from "next-auth";
+import { signIn } from "next-auth/react";
+import SigninButton from "@/components/SigninButton";
+import { authOptions } from "@/lib/options";
+import Link from "next/link";
+import SignOutSpan from "@/components/SignOutSpan";
+import Image from "next/image";
 
-export default function Home() {
+const Home = async() => {
+  const session = await getServerSession(authOptions);
+  console.log(session)
   return (
     <>
-      <header className="bg-blue-800 text-white flex flex-col justify-center items-center">
-        <span className="p-4 text-xl font-bold w-full max-w-screen-md box-border">Neutro Net</span>
-        <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-10 pt-0">
+      <header className="bg-blue-800 text-white flex flex-col justify-center items-center relative bg-cover bg-no-repeat bg-[url('/hero.webp')]" >
+        <div className="absolute top-0 left-0 w-full h-full bg-black/60" style={{zIndex: 1}}/>
+        <div className="flex justify-between p-4 w-full max-w-screen-md box-border" style={{zIndex: 2}}>
+          <span className="text-xl font-bold">Neutro Net</span>
+          {session ? <SignOutSpan /> : <></>}
+        </div>
+        <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-10 pt-0" style={{zIndex: 2}}>
           <p className="my-10 text-4xl text-center">バズり目的の質の低い情報にうんざりしていませんか？</p>
           <div className="flex flex-col justify-center items-center w-4/5">
             <p>年収フィルタリングにより、質の高い対話と有意義な情報交換を実現するための新しい形のコミュニティサイト</p>
             <p>今すぐ参加して、質の高いコミュニティを体験しよう！</p>
           </div>
           <div className="flex gap-4 justify-center">
-            <button className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              参加申請する
-            </button>
-            <button className="mt-8 bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              ログイン
-            </button>
+            {
+              session ? <Link href="/threads" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                コミュニティサイトへ移動
+              </Link> : <>
+                <SigninButton />
+              </>
+            }
           </div>
         </div>
       </header>
@@ -40,6 +54,8 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;
 
 const AboutAndPainSection: React.FC = () => {
   return (
