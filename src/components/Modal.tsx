@@ -43,7 +43,7 @@ const Modal: React.FC<ModalType> = (props) => {
           <div className="h-full overflow-y-scroll overflow-x-hidden">
             {props.children}
           </div>
-          {props.select && <button className="w-full bg-blue-500 text-center py-4 md:rounded-b-lg text-white text-lg" onClick={props.select.handler}>
+          {props.select && <button className="w-full bg-sub-blue text-center py-4 md:rounded-b-lg text-white text-lg" onClick={props.select.handler}>
             {props.select.label}
           </button>}
         </div>

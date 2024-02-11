@@ -1,11 +1,12 @@
-import Board from "@/components/Board";
 import Layout from "@/components/Layout";
 import React from "react";
+import { NextPage } from "next";
+import ThreadsPageComponent from "@/components/pages/Threads";
 
-export default function Home() {
+const ThreadsPage: NextPage = () => {
   return (
     <Layout>
-      <Board posts={[
+      <ThreadsPageComponent posts={[
         {
           id: 1,
           title: "Get Started",
@@ -15,3 +16,5 @@ export default function Home() {
     </Layout>
   );
 }
+
+export default ThreadsPage;

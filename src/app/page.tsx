@@ -8,8 +8,9 @@ import { authOptions } from "@/lib/options";
 import Link from "next/link";
 import SignOutSpan from "@/components/SignOutSpan";
 import Image from "next/image";
+import { NextPage } from "next";
 
-const Home = async() => {
+const TopPage: NextPage = async() => {
   const session = await getServerSession(authOptions);
   return (
     <>
@@ -17,10 +18,11 @@ const Home = async() => {
         <div className="absolute top-0 left-0 w-full h-full bg-main-blue/70 z-10"/>
         <div className="flex flex-col justigy-center items-center z-20 text-white relative">
           <div className="flex justify-between p-4 w-full max-w-screen-md box-border">
-            <span className="text-xl font-bold">Neutro Net</span>
+            {/* <span className="text-xl font-bold">Neutro Net</span> */}
+            <Image src="/whitefontlogo.png" alt="Neutro Net" width={100} height={200} />
             {session ? <SignOutSpan /> : <></>}
           </div>
-          <Image src="/logo.png" alt="Neutro Net" width={60} height={60} className="my-5"/>
+          <Image src="/whitelogo.png" alt="Neutro Net" width={200} height={200} className="mt-10 mb-7"/>
           <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-10 pt-0">
             <p className="mb-10 text-4xl text-center">バズり目的の質の低い情報にうんざりしていませんか？</p>
             <div className="flex flex-col justify-center items-center w-4/5">
@@ -56,7 +58,7 @@ const Home = async() => {
   );
 }
 
-export default Home;
+export default TopPage;
 
 const AboutAndPainSection: React.FC = () => {
   return (
@@ -153,7 +155,7 @@ const Feature1Section: React.FC = () => {
     <Container>
       <div className={`flex flex-col sm:flex-row-reverse max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold">特徴 1</h2>
+          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 1</h2>
           <h3 className="text-3xl font-bold text-main-blue">話題をジャンルごとに選択可能</h3>
           <div className="pt-4">
             話題をジャンルごとに選択が可能です。雑談や仕事、キャリアの話、資産運用の話などができます。
@@ -172,7 +174,7 @@ const Feature2Section: React.FC = () => {
     <Container isColored>
       <div className={`flex flex-col sm:flex-row max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold">特徴 2</h2>
+          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 2</h2>
           <h3 className="text-3xl font-bold text-main-blue">年収フィルタリング</h3>
           <div className="pt-4">
             年収800万円以上に限定することにより、
@@ -193,7 +195,7 @@ const Feature3Section: React.FC = async () => {
     <Container>
       <div className={`flex flex-col sm:flex-row-reverse max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold">特徴 3</h2>
+          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 3</h2>
           <h3 className="text-3xl font-bold text-main-blue">高度で知的な会話</h3>
           <div className="pt-4">
             多角的な視点と建設的な対話で、知的な会話の場を提供します。

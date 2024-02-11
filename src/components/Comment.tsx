@@ -26,7 +26,7 @@ const Comment: React.FC<CommentType> = (props) => {
     <Link href={`/threads/${props.threadId}/comments/${props.id}`}>
       {props.thread && <>
         <p className='text-sm text-gray-500'>{"# " + props.thread.genre}</p>
-        <h2 className='font-bold text-xl pb-1'>{props.thread.title}</h2>
+        <h2 className='font-bold text-xl pb-1 text-main-blue'>{props.thread.title}</h2>
       </>}
       <div className='flex justify-between'>
         <div className='flex justify-end gap-2'>
