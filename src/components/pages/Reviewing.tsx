@@ -7,7 +7,7 @@ const ReviewingPageComponent: NextPage = () => {
   return (
     <div className='w-screen h-screen flex flex-col justify-center items-center'>
       <div className='border-main-blue border-2 rounded-xl flex flex-col justify-center items-center m-4 p-4 gap-4 md:max-w-3xl'>
-        <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={200} />
+        <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={45} />
         <p>
           以下より収入証明書（源泉徴収票等）のアップロードをお願いします。
         </p>

@@ -23,7 +23,7 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
           <div className="flex justify-between px-4 py-3">
             {/* <h1 className='text-xl'>NeutroNet</h1> */}
             <Link href="/threads">
-              <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={200} />
+              <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={45} />
             </Link>
             <div className='flex justify-end'>
               <HamburgerMenu />
