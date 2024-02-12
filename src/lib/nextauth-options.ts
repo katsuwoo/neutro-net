@@ -19,6 +19,7 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           id: user.id,
+          email: user.email,
           salary: user.salary !== null && user.salaryRangeId !== null ? {
             value: user.salary,
             sr: user.salaryRangeId
@@ -38,6 +39,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      email: string;
       salary: {
         value: number
         sr: string
