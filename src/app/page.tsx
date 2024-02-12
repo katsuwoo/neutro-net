@@ -19,10 +19,10 @@ const TopPage: NextPage = async() => {
         <div className="flex flex-col justigy-center items-center z-20 text-white relative">
           <div className="flex justify-between p-4 w-full max-w-screen-md box-border">
             {/* <span className="text-xl font-bold">Neutro Net</span> */}
-            <Image src="/whitefontlogo.png" alt="Neutro Net" width={100} height={200} />
+            <Image src="/whitefontlogo.png" alt="Neutro Net" width={100} height={15} />
             {session ? <SignOutSpan /> : <></>}
           </div>
-          <Image src="/whitelogo.png" alt="Neutro Net" width={200} height={200} className="mt-10 mb-7"/>
+          <Image src="/whitelogo.png" alt="Neutro Net" width={200} height={30} className="mt-10 mb-7"/>
           <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-10 pt-0">
             <p className="mb-10 text-4xl text-center">バズり目的の質の低い情報にうんざりしていませんか？</p>
             <div className="flex flex-col justify-center items-center w-4/5">
