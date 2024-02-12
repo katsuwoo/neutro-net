@@ -1,104 +1,65 @@
-"use client";
-
 import React from 'react';
-import PostButton from '../PostButton';
-import Comment, {CommentType} from '../Comment';
-import CreatePost from '../CreatePost';
+import PostParts from '../PostParts';
+import Comment, { CommentType } from '../Comment';
+import prisma from '@/lib/prisma';
 
-// Assuming you have a Post type
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-};
-
-type ThreadsProps = {
-  posts: Post[];
-};
-
-const ThreadsPageComponent: React.FC<ThreadsProps> = ({ posts }) => {
-  const [isShown, setIsShown] = React.useState(false);
-  return (
-    <div className='relative'>
-      <ThreadList 
-      comments={[
-        {
-            id: 1,
-            thread: {
-              genre: '趣味・スポーツ',
-              title: '普段皆さん何していますか？',
-            },
-            threadId: 1,
-            author: 'Aiud1649',
-            comments: 0,
-            content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-            date: '2023-01-01',
-            favs: 0,
-        },
-        {
-            id: 1,
-            thread: {
-              genre: '趣味・スポーツ',
-              title: '普段皆さん何していますか？',
-            },
-            threadId: 1,
-            author: 'Aiud1649',
-            comments: 0,
-            content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-            date: '2023-01-01',
-            favs: 0,
-        },
-        {
-            id: 1,
-            thread: {
-              genre: '趣味・スポーツ',
-              title: '普段皆さん何していますか？',
-            },
-            threadId: 1,
-            author: 'Aiud1649',
-            comments: 0,
-            content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-            date: '2023-01-01',
-            favs: 0,
-        },
-        {
-            id: 1,
-            thread: {
-              genre: '趣味・スポーツ',
-              title: '普段皆さん何していますか？',
-            },
-            threadId: 1,
-            author: 'Aiud1649',
-            comments: 0,
-            content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-            date: '2023-01-01',
-            favs: 0,
-        },
-        {
-            id: 1,
-            thread: {
-              genre: '趣味・スポーツ',
-              title: '普段皆さん何していますか？',
-            },
-            threadId: 1,
-            author: 'Aiud1649',
-            comments: 0,
-            content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-            date: '2023-01-01',
-            favs: 0,
+const ThreadsPageComponent: React.FC = async() => {
+  const comments: CommentType[] = await prisma.thread.findMany({
+    select: {
+      id: true,
+      title: true,
+      genre: {
+        select: {
+          name: true,
         }
-      ]} />
-      <PostButton handleClick={() => {
-        setIsShown(true);
-      }}/>
-      <CreatePost isShown={isShown} setIsShown={setIsShown} />
+      },
+      initialComment: {
+        select: {
+          id: true,
+          body: true,
+          user: {
+            select: {
+              name: true,
+            }
+          },
+          createdAt: true,
+        }
+      },
+    },
+    orderBy: {
+      initialComment: {
+        createdAt: 'desc',
+      }
+    }
+  }).then((res) => {
+    return res.map((thread) => {
+      return {
+        id: thread.initialComment.id,
+        thread: {
+          title: thread.title,
+          genre: thread.genre.name,
+        },
+        threadId: thread.id,
+        author: thread.initialComment.user.name || '',
+        comments: 0,
+        content: thread.initialComment.body,
+        // JST YYYY/MM/DD HH:MM
+        date: new Date(thread.initialComment.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
+        favs: 0,
+      }
+    })
+  })
+  return (
+    <div>
+      <ThList comments={comments} />
+      <PostParts />
     </div>
   );
 };
 
 export default ThreadsPageComponent;
 
-const ThreadList: React.FC<{comments: CommentType[]}> = ({comments}) => {
+const ThList: React.FC<{comments: CommentType[]}> = ({comments}) => {
   return (
     <ul>
       {comments.map((comment) => (

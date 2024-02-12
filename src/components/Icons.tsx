@@ -20,9 +20,9 @@ const Icons: React.FC<IconsType> = (props) => {
           <FontAwesomeIcon icon={faComments} className='h-4' />
           <p>{props.comments}</p>
         </div>
-      </div>
-      <div className='flex justify-end gap-2 hover:cursor-pointer'>
-        <FontAwesomeIcon icon={faBookmark} className='h-5' />
+        <div className='flex pl-2 justify-end gap-2 hover:cursor-pointer'>
+          <FontAwesomeIcon icon={faBookmark} className='h-5' />
+        </div>
       </div>
     </div>
   )

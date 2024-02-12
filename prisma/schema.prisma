@@ -57,31 +57,23 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   salary        Int?
+  salaryRangeId String?
+  salaryRange   SalaryRange? @relation(fields: [salaryRangeId], references: [id])
 
   comments          Comment[]
-  salaryRanges      UsersWithinSalaryRange[]
   bookmarkedThreads BookmarkedThread[]
   likes             LikeComment[]
+
+  @@index([salaryRangeId])
 }
 
 model SalaryRange {
-  id            String    @id @default(cuid())
+  id            String    @id
   min Int
   max Int?
 
   threads Thread[]
-  users   UsersWithinSalaryRange[]
-}
-
-model UsersWithinSalaryRange {
-  userId        String
-  user          User        @relation(fields: [userId], references: [id])
-  salaryRangeId String
-  salaryRange   SalaryRange @relation(fields: [salaryRangeId], references: [id])
-
-  @@id([userId, salaryRangeId])
-  @@index([userId])
-  @@index([salaryRangeId])
+  users User[]
 }
 
 model Thread {

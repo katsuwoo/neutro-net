@@ -1,9 +1,7 @@
-'use client';
-
 import React from 'react';
 import Comment, { CommentType } from '@/components/Comment';
-import PostButton from '@/components/PostButton';
-import CreatePost from '@/components/CreatePost';
+import PostParts from '../PostParts';
+import prisma from '@/lib/prisma';
 
 interface Thread {
   genre: string;
@@ -16,46 +14,69 @@ interface Thread {
   commentList: CommentType[];
 }
 
-const CommentPageComponent: React.FC = () => {
-  const [isShown, setIsShown] = React.useState(false);
-  const thread: Thread = {
-    genre: '趣味・スポーツ',
-    title: '普段皆さん何していますか？',
-    content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-    author: 'Ai432814',
-    date: '2023-01-01',
-    favs: 0,
-    comments: 0,
-    commentList: [
-      {
-        id: 1,
-        threadId: 1,
-        author: 'Aiud1649',
-        date: '2023-01-01',
-        content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-        favs: 0,
-        comments: 0,
+const CommentPageComponent: React.FC<{
+  threadId: number;
+  commentId: number;
+}> = async ({threadId, commentId}) => {
+  const {genre, title} = await prisma.thread.findUniqueOrThrow({
+    where: {
+      id: threadId,
+    },
+    select: {
+      genre: true,
+      title: true,
+    }
+  })
+  const thread: Thread = await prisma.comment.findUniqueOrThrow({
+    where: {
+      id: commentId,
+    },
+    select: {
+      body: true,
+      user: {
+        select: {
+          name: true,
+        }
       },
-      {
-        id: 1,
-        threadId: 1,
-        author: 'Aiud1649',
-        date: '2023-01-01',
-        content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-        favs: 0,
-        comments: 0,
-      },
-      {
-        id: 1,
-        threadId: 1,
-        author: 'Aiud1649',
-        date: '2023-01-01',
-        content: '最近時間ができたのでスポーツなど\nしようと思っています。',
-        favs: 0,
-        comments: 0,
-      },
-    ],
-  };
+      createdAt: true,
+      replies: {
+        select: {
+          id: true,
+          body: true,
+          user: {
+            select: {
+              name: true,
+            }
+          },
+          createdAt: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        }
+      }
+    },
+  }).then((res) => {
+    return {
+      genre: genre.name,
+      title: title,
+      content: res.body,
+      author: res.user.name || '',
+      date: new Date(res.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
+      favs: 0,
+      comments: 0,
+      commentList: res.replies.map((reply) => {
+        return {
+          id: reply.id,
+          threadId: threadId,
+          author: reply.user.name || '',
+          date: new Date(reply.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
+          content: reply.body,
+          favs: 0,
+          comments: 0,
+        }
+      })
+    }
+  })
   return (
     <>
     <div className='p-2 border-b-2' id='title-section'>
@@ -83,12 +104,9 @@ const CommentPageComponent: React.FC = () => {
         </li>
       ))}
     </ul>
-    <PostButton handleClick={() => {
-      setIsShown(true);
-    }}/>
-    <CreatePost isShown={isShown} setIsShown={setIsShown} comment={{
-      id: 1,
-      content: '最近時間ができたのでスポーツなど\nしようと思っています。',
+    <PostParts comment={{
+      id: commentId,
+      content: thread.content,
     }}/>
     </>
   );

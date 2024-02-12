@@ -1,40 +1,27 @@
 "use client";
 
+import { GENRES } from '@/constants';
+import { Genre } from '@prisma/client';
 import React from 'react';
+import { ErrP } from './NoteDiv';
 
 interface GenreDropdownProps {
   selected: number | null;
   setSelected: React.Dispatch<React.SetStateAction<number | null>>;
+  error: string;
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
-const GenreDropdown: React.FC<GenreDropdownProps> = ({ selected, setSelected }) => {
-  // Can order later if needed
-  const genres = [
-    {
-      id: -1,
-      name: '選択してください',
-    },
-    {
-      id: 0,
-      name: '趣味・スポーツ',
-    },
-    {
-      id: 1,
-      name: '恋愛・人間関係',
-    },
-    {
-      id: 2,
-      name: '学問・キャリア',
-    },
-    {
-      id: 3,
-      name: '健康・美容',
-    },
-    {
-      id: 999,
-      name: '雑談',
-    }
-  ];
+// Can order later if needed
+const GENRE_LIST: Genre[] = [
+  {
+    id: -1,
+    name: '選択してください',
+  },
+  ...GENRES
+];
+
+const GenreDropdown: React.FC<GenreDropdownProps> = ({ selected, setSelected, error, setError }) => {
   return (
     <div className="relative">
       <select
@@ -45,12 +32,13 @@ const GenreDropdown: React.FC<GenreDropdownProps> = ({ selected, setSelected }) 
         "
         onChange={(e) => {
           const selectedValue = parseInt(e.target.value);
-          console.log(selectedValue)
-          if (selectedValue >= 0)
+          if (selectedValue >= 0) {
             setSelected(selectedValue);
+            setError("")
+          }
         }}
       >
-        {genres.map((genre, index) => (
+        {GENRE_LIST.map((genre, index) => (
           <option key={`genre_${index}`} value={
             genre.id
           } hidden={genre.id === -1}>
@@ -58,6 +46,7 @@ const GenreDropdown: React.FC<GenreDropdownProps> = ({ selected, setSelected }) 
           </option>
         ))}
       </select>
+      <ErrP errMessage={error} />
     </div>
   );
 }

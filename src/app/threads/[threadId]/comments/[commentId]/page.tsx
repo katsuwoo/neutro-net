@@ -3,10 +3,13 @@ import { NextPage } from 'next';
 import Layout from '@/components/Layout';
 import CommentPageComponent from '@/components/pages/Comment';
 
-const CommentPage: NextPage = () => {
+const CommentPage: NextPage<{params: {threadId: string, commentId: string}}> = ({params}) => {
+
   return (
     <Layout>
-      <CommentPageComponent />
+      <CommentPageComponent 
+      threadId={parseInt(params.threadId)} 
+      commentId={parseInt(params.commentId)} />
     </Layout>
   );
 };

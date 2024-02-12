@@ -7,7 +7,7 @@ export default function SigninButton() {
   return (
     <button className="mt-8 bg-sub-blue hover:bg-main-blue text-white font-bold py-2 px-4 rounded"
       onClick={() => {
-        signIn();
+        signIn(undefined, { callbackUrl: `${window.location.href}threads` });
       }}
     >
       コミュニティへ参加する

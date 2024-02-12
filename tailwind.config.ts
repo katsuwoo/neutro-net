@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        body: [
+          'Noto Sans JP'
+        ]
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

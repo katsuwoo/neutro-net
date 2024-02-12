@@ -17,7 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className={"font-body"}>
         <NextAuthProvider>
           {children}
         </NextAuthProvider>
