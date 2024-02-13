@@ -1,12 +1,16 @@
+import FullScreenLoading from "@/components/FullScreenLoading";
 import Layout from "@/components/Layout";
 import ProfilePageComponent from "@/components/pages/Profile";
 import { NextPage } from "next";
+import { Suspense } from "react";
 
 const ProfilePage: NextPage = async () => {
   return (
-    <Layout>
-      <ProfilePageComponent />
-    </Layout>
+    <Suspense fallback={<FullScreenLoading />}>
+      <Layout>
+        <ProfilePageComponent />
+      </Layout>
+    </Suspense>
   );
 };
 

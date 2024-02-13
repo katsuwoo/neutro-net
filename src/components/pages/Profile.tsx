@@ -50,6 +50,14 @@ const ProfilePageComponent: React.FC = async () => {
             <p>Email</p>
             <p>{profile.email}</p>
           </div>
+          <div>
+            <p>登録年収</p>
+            <p>{"850万円"}</p>
+          </div>
+          <div>
+            <p>参加コミュニティ</p>
+            <p>{"800-1200万円"}</p>
+          </div>
         </div>
       </div>
       <div className="flex flex-col py-4 gap-2 bg-gray-500 text-white mt-auto">

@@ -1,13 +1,16 @@
 import Layout from "@/components/Layout";
-import React from "react";
+import React, { Suspense } from "react";
 import { NextPage } from "next";
 import ThreadsPageComponent from "@/components/pages/Threads";
+import FullScreenLoading from "@/components/FullScreenLoading";
 
 const ThreadsPage: NextPage = () => {
   return (
-    <Layout>
-      <ThreadsPageComponent />
-    </Layout>
+    <Suspense fallback={<FullScreenLoading />}>
+      <Layout>
+        <ThreadsPageComponent />
+      </Layout>
+    </Suspense>
   );
 }
 
