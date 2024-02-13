@@ -23,7 +23,7 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
           <div className="flex justify-between px-4 py-3">
             {/* <h1 className='text-xl'>NeutroNet</h1> */}
             <Link href="/threads">
-              <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={45} />
+              <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={30} />
             </Link>
             <div className='flex justify-end'>
               <HamburgerMenu />
@@ -31,11 +31,22 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
           </div>
         </div>
       </header>
-      <main className='max-w-3xl min-w-80 mx-auto min-h-[calc(100vh-110px)]'>
+      <main className='max-w-3xl min-w-80 mx-auto min-h-[calc(100vh-56px-308px)]'>
         {children}
       </main>
-      <footer className="bg-main-blue text-white text-center p-4">
-          © 2024 NeutroNet. All rights reserved.
+      <footer className="bg-main-blue text-white text-center p-4 pt-2">
+        <div className='max-w-2xl min-w-80 mx-auto'>
+          <div className="flex flex-col gap-2 bg-main-blue text-white">
+            <div className="flex text-base p-2">プライバシーポリシー</div>
+            <div className="flex text-base p-2">利用規約</div>
+            <div className="flex text-base p-2">コミュニティガイドライン</div>
+            <div className="flex text-base p-2">問い合わせ</div>
+            <div className="flex text-base p-2">ログアウト</div>
+          </div>
+          <div className='pt-5'>
+            © 2024 NeutroNet. All rights reserved.
+          </div>
+        </div>
       </footer>
     </div>
   );

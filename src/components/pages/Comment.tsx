@@ -60,7 +60,7 @@ const CommentPageComponent: React.FC<{
       genre: genre.name,
       title: title,
       content: res.body,
-      author: res.user.name || '',
+      author: res.user.name,
       date: new Date(res.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
       favs: 0,
       comments: 0,
@@ -68,7 +68,7 @@ const CommentPageComponent: React.FC<{
         return {
           id: reply.id,
           threadId: threadId,
-          author: reply.user.name || '',
+          author: reply.user.name,
           date: new Date(reply.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
           content: reply.body,
           favs: 0,

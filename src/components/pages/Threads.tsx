@@ -40,7 +40,7 @@ const ThreadsPageComponent: React.FC = async() => {
           genre: thread.genre.name,
         },
         threadId: thread.id,
-        author: thread.initialComment.user.name || '',
+        author: thread.initialComment.user.name,
         comments: 0,
         content: thread.initialComment.body,
         // JST YYYY/MM/DD HH:MM
