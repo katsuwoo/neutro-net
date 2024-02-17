@@ -6,6 +6,8 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import ReviewingPageComponent from './pages/Reviewing';
+import prisma from '@/lib/prisma';
+import NotificationBell from './NotificationBell';
 
 const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
   const session = await getServerSession(authOptions);
@@ -16,6 +18,12 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
       <ReviewingPageComponent />
     )
   }
+  const notificationCount = await prisma.notification.count({
+    where: {
+      userId: session.user.id,
+      isRead: false,
+    }
+  })
   return (
     <div className='min-h-screen'>
       <header className='border-b-2'>
@@ -25,7 +33,8 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
             <Link href="/threads">
               <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={30} />
             </Link>
-            <div className='flex justify-end'>
+            <div className='flex gap-2 justify-end'>
+              <NotificationBell count={notificationCount} />
               <HamburgerMenu />
             </div>
           </div>

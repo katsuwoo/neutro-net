@@ -23,17 +23,18 @@ const TopPageComponent: React.FC = async() => {
           </div>
           <Image src="/whitelogo.png" alt="NeutroNet" width={200} height={30} className="mt-10 mb-7"/>
           <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-10 pt-0">
-            <p className="mb-10 text-4xl text-center">バズり目的の質の低い情報にうんざりしていませんか？</p>
-            <div className="flex flex-col justify-center items-center w-4/5">
-              <p>年収フィルタリングにより、質の高い対話と有意義な情報交換を実現するための新しい形のコミュニティサイト</p>
-              <p>今すぐ参加して、質の高いコミュニティを体験しよう！</p>
+            <p className="mb-10 text-4xl text-center">年収800万円以上のバイアスフリーコミュニティ</p>
+            <div className="flex flex-col justify-center items-center">
+              <p>インプ稼ぎやバズり目的の発信が跋扈するSNSに物足りなさを感じるあなたに。
+                偏りのない多角的な情報収集や、信憑性が高く本質的な対話を、
+                年収フィルタリングにより実現する新しいコミュニティサイトです。</p>
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center mt-8">
               {
-                session ? <Link href="/threads" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                session ? <Link href="/threads" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   コミュニティサイトへ移動
                 </Link> : <>
-                  <SigninButton />
+                  <SigninButton body="早速参加してみる" />
                 </>
               }
             </div>
@@ -43,6 +44,9 @@ const TopPageComponent: React.FC = async() => {
       <AboutAndPainSection />
       <ConcernsSection />
       <ProcessSection />
+      <div className="text-3xl text-center text-main-blue font-bold  pt-6 px-6 bg-white">
+        安心してお使いいただくための3つの特徴
+      </div>
       <Feature1Section />
       <Feature2Section />
       <Feature3Section />
@@ -64,9 +68,10 @@ const AboutAndPainSection: React.FC = () => {
     <Container isColored>
       <div className={`flex flex-col gap-4 justify-center items-center max-w-screen-lg py-2 pb-10 px-3 w-full`}>
         <h2 className="text-3xl font-bold text-main-blue text-center">Neuro Net とは</h2>
-        <div className="bg-white rounded-lg text-xl p-4 sm:mx-14 shadow-md">
-          Neutro Netは、年収でフィルタリングを行うことにより、バイアスのないコミュニケーションの場を提供するSNSです。
-          政治、経済、株式など様々な話題について、多角的で建設的な議論を求める方々のためのプラットフォームです。
+        <div className="bg-white rounded-lg text-xl p-4 mt-4 sm:mx-14 shadow-md">
+        政治・経済・投資から趣味・ペット・子育てまで、様々な話題について建設的に、フラットに語れるプラットフォームです。
+        リテラシーや生活水準が近い人同士での情報交換ができるよう、年収ごとに参加者をフィルタリング(※)しています。
+        （※初回は、年収800万円以上のコミュニティのみリリース。以降、段階的に年収帯ごとのコミュニティを実装予定。）
         </div>
       </div>
     </Container>
@@ -79,24 +84,28 @@ const ConcernsSection: React.FC = () => {
     <Container>
       <div className={`flex flex-col gap-4 justify-center items-center max-w-screen-lg py-2 pb-10 px-3 w-full`}>
         <h2 className="text-3xl font-bold text-main-blue text-center">既存SNSのお悩み</h2>
-        <ul className="text-xl">
+        <ul className="text-xl pt-4">
           <li className="flex items-center gap-2">
             <FontAwesomeIcon icon={faCheckSquare} className="h-5"/>
-            <span>インプレッション目的の極端な発言</span>
+            <span>インプレッション稼ぎが目的の極端な発言の増加</span>
           </li>
           <li className="flex items-center gap-2">
             <FontAwesomeIcon icon={faCheckSquare} className="h-5"/>
-            <span>過激・攻撃的な発言</span>
+            <span>破壊的・攻撃的な視野の狭い投稿の拡散</span>
           </li>
           <li className="flex items-center gap-2">
             <FontAwesomeIcon icon={faCheckSquare} className="h-5"/>
-            <span>質の低いノイズとなる情報</span>
+            <span>PRや低品質な情報による情報収集効率の低下</span>
           </li>
         </ul>
         <FontAwesomeIcon icon={faCaretDown} className="h-16 m-[-15px]" />
         <div className="text-2xl font-bold text-center">
-          年収800万円以上に限定することに寄り高度なコミュニティを実現
+          年収によるフィルタリングで、本質的な議論のできるコミュニティを実現
         </div>
+        <div className="mt-6">
+          <SigninButton body="年収800万円以上です" />
+        </div>
+        {/* （なんかサクラで投稿してキャプチャ貼りたい、ここに挿絵） */}
       </div>
     </Container>
   );
@@ -106,24 +115,24 @@ const ProcessSection: React.FC = () => {
   return (
     <Container isColored>
       <div className={`flex flex-col gap-4 justify-center items-center max-w-screen-lg py-2 pb-10 px-3 w-full`}>
-        <h2 className="text-3xl font-bold text-main-blue text-center">参加申請の流れ</h2>
-        <ul className="pt-4 flex flex-col gap-10 sm:flex-row sm:mx-14 sm:gap-4">
+        <h2 className="text-3xl font-bold text-main-blue text-center">コミュニティ参加の流れ</h2>
+        <ul className="pt-8 flex flex-col gap-10 sm:flex-row sm:mx-14 sm:gap-4">
           <li className="flex flex-col items-center relative sm:flex-1">
             <h3 className="absolute top-[-14px] tracking-[0.2em] after:ml-[-0.2em] text-xl font-bold text-white bg-main-blue w-24 text-center rounded-lg">手順.1</h3>
             <div className="text-left bg-white rounded-lg text-xl p-3 pt-6 h-full w-full">
-              アカウントを作成します
+              アカウントを作成。必須入力項目はメールアドレス・職種・年収のみ！
             </div>
           </li>
           <li className="flex flex-col items-center relative sm:flex-1">
             <h3 className="absolute top-[-14px] tracking-[0.2em] after:ml-[-0.2em] text-xl font-bold text-white bg-main-blue w-24 text-center rounded-lg">手順.2</h3>
             <div className="text-left bg-white rounded-lg text-xl p-3 pt-6 h-full w-full">
-              収入証明書（源泉徴収票等）をアップロード
+              収入証明書（源泉徴収票等）の写真をアップロード
             </div>
           </li>
           <li className="flex flex-col items-center relative sm:flex-1">
             <h3 className="absolute top-[-14px] tracking-[0.2em] after:ml-[-0.2em] text-xl font-bold text-white bg-main-blue w-24 text-center rounded-lg">手順.3</h3>
             <div className="text-left bg-white rounded-lg text-xl p-3 pt-6 h-full w-full">
-              収入情報が記録されたらコミュニティへ参加！
+            2日以内に参加承認。コミュニティへ参加
             </div>
           </li>
         </ul>
@@ -138,10 +147,10 @@ const Feature1Section: React.FC = () => {
     <Container>
       <div className={`flex flex-col sm:flex-row-reverse max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 1</h2>
-          <h3 className="text-3xl font-bold text-main-blue">話題をジャンルごとに選択可能</h3>
-          <div className="pt-4">
-            話題をジャンルごとに選択が可能です。雑談や仕事、キャリアの話、資産運用の話などができます。
+          <h2 className="text-2xl font-bold underline pb-2 decoration-sub-yellow decoration-4">①匿名性</h2>
+          <div className="flex flex-col gap-2 pt-4">
+            <div>・収入証明書等は、収入がわかる部分のみお送りいただきます</div>
+            <div>・名前や会社名等、収入以外の個人情報が分かる部分を管理者が閲覧・確認することはありません</div>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center box-border p-10">
@@ -157,11 +166,10 @@ const Feature2Section: React.FC = () => {
     <Container isColored>
       <div className={`flex flex-col sm:flex-row max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 2</h2>
-          <h3 className="text-3xl font-bold text-main-blue">年収フィルタリング</h3>
-          <div className="pt-4">
-            年収800万円以上に限定することにより、
-            Neutro Netでは、同じ生活レベルの人々との有意義な情報交換を通じて、賢いコミュニティを構築します。
+          <h2 className="text-2xl font-bold underline pb-2 decoration-sub-yellow decoration-4">②安全性</h2>
+          <div className="flex flex-col gap-2 pt-4">
+            <div>・お送りいただいた収入証明書等のデータは、コミュニティ参加の認証のみに使用し、認証後は即物理削除いたします</div>
+            <div>・コミュニティ参加後は、自分の年収が他のユーザに公開されることはありません</div>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center box-border p-10">
@@ -178,10 +186,9 @@ const Feature3Section: React.FC = async () => {
     <Container>
       <div className={`flex flex-col sm:flex-row-reverse max-w-screen-lg gap-2 mx-auto w-full`}>
         <div className="flex flex-col justify-center  min-w-[50%] py-4 box-border">
-          <h2 className="text-xl font-bold underline pb-2 decoration-sub-yellow decoration-4">特徴 3</h2>
-          <h3 className="text-3xl font-bold text-main-blue">高度で知的な会話</h3>
-          <div className="pt-4">
-            多角的な視点と建設的な対話で、知的な会話の場を提供します。
+          <h2 className="text-2xl font-bold underline pb-2 decoration-sub-yellow decoration-4">③信頼性</h2>
+          <div className="flex flex-col gap-2 pt-4">
+            <div>・収入証明書を提示し、コミュニティごとの基準を満たしたユーザのみが参加できます</div>
           </div>
         </div>
         <div className="flex flex-col justify-center items-center box-border p-10">
@@ -192,7 +199,6 @@ const Feature3Section: React.FC = async () => {
         session ? <Link href="/threads" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           コミュニティサイトへ移動
         </Link> : <>
-          <SigninButton />
         </>
       }
     </Container>

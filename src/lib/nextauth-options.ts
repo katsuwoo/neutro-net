@@ -3,6 +3,7 @@ import { DefaultSession, NextAuthOptions } from "next-auth";
 import prisma from "./prisma";
 import GoogleProvider from "next-auth/providers/google";
 import { User as PrismaUser } from "@prisma/client";
+import { getRandomString } from "./utils";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,7 +12,21 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+  adapter: {
+    ...PrismaAdapter(prisma),
+    createUser: async ({...data}) => {
+      const userId = getRandomString(10);
+      const user = await prisma.user.create({
+        data: {
+          id: userId,
+          name: userId,
+          email: data.email,
+          emailVerified: data.emailVerified,
+        },
+      });
+      return user;
+    }
+  },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     session: ({session, user}) => {
@@ -19,6 +34,7 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           id: user.id,
+          name: user.name,
           email: user.email,
           salary: user.salary !== null && user.salaryRangeId !== null ? {
             value: user.salary,
@@ -39,6 +55,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      name: string;
       email: string;
       salary: {
         value: number

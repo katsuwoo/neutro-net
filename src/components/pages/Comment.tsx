@@ -1,41 +1,63 @@
 import React from 'react';
-import Comment, { CommentType } from '@/components/Comment';
+import Comment from '../Comment';
 import PostParts from '../PostParts';
 import prisma from '@/lib/prisma';
-
-interface Thread {
-  genre: string;
-  title: string;
-  content: string;
-  author: string;
-  date: string;
-  favs: number;
-  comments: number;
-  commentList: CommentType[];
-}
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/nextauth-options';
+import { Thread } from '@/lib/schema/thread';
 
 const CommentPageComponent: React.FC<{
-  threadId: number;
   commentId: number;
-}> = async ({threadId, commentId}) => {
-  const {genre, title} = await prisma.thread.findUniqueOrThrow({
-    where: {
-      id: threadId,
-    },
-    select: {
-      genre: true,
-      title: true,
-    }
-  })
+}> = async ({commentId}) => {
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.salary === null) {
+    return <></>
+  }
   const thread: Thread = await prisma.comment.findUniqueOrThrow({
     where: {
       id: commentId,
+      thread: {
+        salaryRangeId: session.user.salary.sr
+      }
     },
     select: {
+      thread: {
+        select: {
+          id: true,
+          genre: {
+            select: {
+              name: true,
+            }
+          },
+          title: true,
+        }
+      },
       body: true,
       user: {
         select: {
           name: true,
+        }
+      },
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+        }
+      },
+      likes: {
+        select: {
+          userId: true, // Anything is ok for isLiked
+        },
+        where: {
+          userId: session.user.id,
+        }
+      },
+      bookmarks: {
+        select: {
+          userId: true, // Anything is ok for isBookmarked
+        },
+        where: {
+          userId: session.user.id,
         }
       },
       createdAt: true,
@@ -43,6 +65,28 @@ const CommentPageComponent: React.FC<{
         select: {
           id: true,
           body: true,
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+            }
+          },
+          likes: {
+            select: {
+              userId: true, // Anything is ok for isLiked
+            },
+            where: {
+              userId: session.user.id,
+            }
+          },
+          bookmarks: {
+            select: {
+              userId: true, // Anything is ok for isBookmarked
+            },
+            where: {
+              userId: session.user.id,
+            }
+          },
           user: {
             select: {
               name: true,
@@ -57,22 +101,27 @@ const CommentPageComponent: React.FC<{
     },
   }).then((res) => {
     return {
-      genre: genre.name,
-      title: title,
+      id: res.thread.id,
+      genre: res.thread.genre.name,
+      title: res.thread.title,
       content: res.body,
       author: res.user.name,
       date: new Date(res.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
-      favs: 0,
-      comments: 0,
+      likes: res._count.likes,
+      comments: res._count.replies,
+      isLiked: res.likes.length > 0,
+      isBookmarked: res.bookmarks.length > 0,
       commentList: res.replies.map((reply) => {
         return {
           id: reply.id,
-          threadId: threadId,
+          threadId: res.thread.id,
           author: reply.user.name,
           date: new Date(reply.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
           content: reply.body,
-          favs: 0,
-          comments: 0,
+          likes: reply._count.likes,
+          comments: reply._count.replies,
+          isLiked: reply.likes.length > 0,
+          isBookmarked: reply.bookmarks.length > 0,
         }
       })
     }
@@ -87,13 +136,15 @@ const CommentPageComponent: React.FC<{
     </div>
     <div className='p-2'>
       <Comment
-        id={1}
-        threadId={1}
+        id={commentId}
+        threadId={thread.id}
         author={thread.author}
         date={thread.date}
         content={thread.content}
-        favs={thread.favs}
+        likes={thread.likes}
         comments={thread.comments}
+        isLiked={thread.isLiked}
+        isBookmarked={thread.isBookmarked}
       />
     </div>
     <h3 className='p-4 border-y-4 text-xs'>コメント一覧</h3>
@@ -106,6 +157,7 @@ const CommentPageComponent: React.FC<{
     </ul>
     <PostParts comment={{
       id: commentId,
+      threadId: thread.id,
       content: thread.content,
     }}/>
     </>

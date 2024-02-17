@@ -4,14 +4,13 @@ import Layout from '@/components/Layout';
 import CommentPageComponent from '@/components/pages/Comment';
 import FullScreenLoading from '@/components/FullScreenLoading';
 
-const CommentPage: NextPage<{params: {threadId: string, commentId: string}}> = ({params}) => {
+const CommentPage: NextPage<{params: {commentId: string}}> = ({params}) => {
 
   return (
     <Suspense fallback={<FullScreenLoading />}>
       <Layout>
       <CommentPageComponent 
-      threadId={parseInt(params.threadId)} 
-      commentId={parseInt(params.commentId)} />
+        commentId={parseInt(params.commentId)} />
       </Layout>
     </Suspense>
   );

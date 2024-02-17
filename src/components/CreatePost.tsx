@@ -4,33 +4,9 @@ import React from "react";
 import Modal from "./Modal";
 import GenreDropdown from "./GenreDropdown";
 import NoteDiv from "./NoteDiv";
-import { TITLE_LENGTH } from "@/types/constants";
-import axios from 'axios';
-import { CreateThreadRequestType, CreateThreadResponseType } from "@/app/api/threads/route";
-import { CreateCommentRequestType, CreateCommentResponseType } from "@/app/api/comments/route";
+import { TITLE_LENGTH } from "@/constants";
 import { useRouter } from "next/navigation";
-
-const fetcherComment = async (data: CreateCommentRequestType): Promise<CreateCommentResponseType | null> => {
-  const res = await axios.post(
-    "/api/comments", data
-  )
-  if (res.status !== 201) {
-    return null
-  } else {
-    return res.data
-  }
-}
-
-const fetcher = async (data: CreateThreadRequestType): Promise<CreateThreadResponseType | null> => {
-  const res = await axios.post(
-    "/api/threads", data
-  )
-  if (res.status !== 201) {
-    return null
-  } else {
-    return res.data
-  }
-}
+import { createComment, createThread } from "@/lib/api";
 
 const CreatePost: React.FC<{
   setIsShown: React.Dispatch<React.SetStateAction<boolean>>
@@ -38,6 +14,7 @@ const CreatePost: React.FC<{
   comment?: {
     id: number;
     content: string;
+    threadId: number;
   }
 }> = (props) => {
   const [title, setTitle] = React.useState<string>("");
@@ -74,16 +51,15 @@ const CreatePost: React.FC<{
       handler: () => {
         let isError = false
         if (props.comment === undefined && genre === null) {
-          console.log("通過1")
           isError = true
           setErrorForGenre("ジャンルを選んでください")
         }
         if (formRef.current && formRef.current.checkValidity() && !isError) {
           if (props.comment) {
             // コメントの場合
-            console.log("通過")
-            fetcherComment({
+            createComment({
               toCommentId: props.comment.id,
+              threadId: props.comment.threadId,
               content
             }).then(val => {
               if (val !== null && props.comment && 'commentId' in val) {
@@ -92,13 +68,13 @@ const CreatePost: React.FC<{
             })
           } else if (genre !== null) {
             // 投稿の場合
-            fetcher({
+            createThread({
               title,
               genre,
               content
             }).then(val => {
-              if (val !== null && 'threadId' in val && 'commentId' in val) {
-                router.push(`/threads/${val.threadId}/comments/${val.commentId}`)
+              if (val !== null) {
+                window.location.reload()
               }
             })
           }

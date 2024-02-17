@@ -60,3 +60,6 @@ export const SALARY_RANGES: Prisma.SalaryRangeCreateInput[] = [
     min: 2000
   },
 ]
+
+export const TITLE_LENGTH = 50;
+export const CONTENT_LENGTH = 1000;

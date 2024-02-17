@@ -1,54 +1,90 @@
 import React from 'react';
 import PostParts from '../PostParts';
-import Comment, { CommentType } from '../Comment';
+import Comment from '../Comment';
 import prisma from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/nextauth-options';
+import { CommentType } from '@/lib/schema/comment';
 
 const ThreadsPageComponent: React.FC = async() => {
-  const comments: CommentType[] = await prisma.thread.findMany({
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.salary === null) {
+    return <></>
+  }
+  const comments: CommentType[] = await prisma.comment.findMany({
+    where: {
+      thread: {
+        salaryRangeId: session.user.salary.sr
+      },
+      toCommentId: null
+    },
     select: {
       id: true,
-      title: true,
-      genre: {
-        select: {
-          name: true,
-        }
-      },
-      initialComment: {
+      thread: {
         select: {
           id: true,
-          body: true,
-          user: {
+          title: true,
+          genre: {
             select: {
               name: true,
             }
           },
-          createdAt: true,
         }
       },
-    },
-    orderBy: {
-      initialComment: {
-        createdAt: 'desc',
-      }
-    }
-  }).then((res) => {
-    return res.map((thread) => {
-      return {
-        id: thread.initialComment.id,
-        thread: {
-          title: thread.title,
-          genre: thread.genre.name,
+      user: {
+        select: {
+          name: true,
+        }
+      },
+      body: true,
+      createdAt: true,
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+        }
+      },
+      likes: {
+        select: {
+          userId: true
         },
-        threadId: thread.id,
-        author: thread.initialComment.user.name,
-        comments: 0,
-        content: thread.initialComment.body,
-        // JST YYYY/MM/DD HH:MM
-        date: new Date(thread.initialComment.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
-        favs: 0,
+        where: {
+          userId: session.user.id
+        }
+      },
+      bookmarks: {
+        select: {
+          userId: true
+        },
+        where: {
+          userId: session.user.id
+        }
       }
-    })
-  })
+    },
+    orderBy: [
+      {
+        createdAt: 'desc'
+      }
+    ]
+  }).then((comments) => {
+    return comments.map((comment) => {
+      return {
+        id: comment.id,
+        thread: {
+          title: comment.thread.title,
+          genre: comment.thread.genre.name,
+        },
+        threadId: comment.thread.id,
+        author: comment.user.name,
+        content: comment.body,
+        date: new Date(comment.createdAt).toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'}),
+        likes: comment._count.likes,
+        comments: comment._count.replies,
+        isLiked: comment.likes.length > 0,
+        isBookmarked: comment.bookmarks.length > 0,
+      };
+    });
+  });
   return (
     <div>
       <ThList comments={comments} />

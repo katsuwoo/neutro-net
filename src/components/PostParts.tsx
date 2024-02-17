@@ -4,10 +4,13 @@ import React from 'react';
 import PostButton from './PostButton';
 import CreatePost from './CreatePost';
 
-const PostParts: React.FC<{comment?: {
-  id: number;
-  content: string;
-} | undefined}> = ({comment}) => {
+const PostParts: React.FC<{
+  comment?: {
+    id: number;
+    threadId: number;
+    content: string;
+  } | undefined
+}> = ({comment}) => {
   const [isShown, setIsShown] = React.useState(false);
   return (
     <>

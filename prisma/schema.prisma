@@ -47,22 +47,27 @@ model VerificationToken {
 }
 
 model User {
-  id            String       @id @default(cuid())
+  id            String    @id
   name          String
-  email         String       @unique
+  email         String    @unique
   emailVerified DateTime?
+
   image         String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  softDeletedAt DateTime?
+
   salary        Int?
   salaryRangeId String?
   salaryRange   SalaryRange? @relation(fields: [salaryRangeId], references: [id])
 
-  comments          Comment[]
-  bookmarkedThreads BookmarkedThread[]
-  likes             LikeComment[]
+  comments      Comment[]
+  likes         Like[]
+  bookmarks     Bookmark[]
+  notifications Notification[]
+  fromUser      Notification[] @relation("FromUser")
 
   @@index([salaryRangeId])
 }
@@ -77,29 +82,27 @@ model SalaryRange {
 }
 
 model Thread {
-  id               Int                @id @default(autoincrement())
-  salaryRangeId    String
-  salaryRange      SalaryRange        @relation(fields: [salaryRangeId], references: [id])
-  genreId          Int
-  genre            Genre              @relation(fields: [genreId], references: [id])
-  initialCommentId Int                @unique
-  initialComment   Comment            @relation(fields: [initialCommentId], references: [id])
-  title            String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  bookmarkedBy     BookmarkedThread[]
+  id            Int         @id @default(autoincrement())
+  salaryRangeId String
+  salaryRange   SalaryRange @relation(fields: [salaryRangeId], references: [id])
+  genreId       Int
+  genre         Genre       @relation(fields: [genreId], references: [id])
+  title         String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  comments Comment[]
 
   @@index([salaryRangeId])
   @@index([genreId])
-  @@index([initialCommentId])
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  thread    Thread?
-  isInitial Boolean  @default(false)
+  threadId  Int
+  thread    Thread   @relation(fields: [threadId], references: [id])
   body      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -108,10 +111,14 @@ model Comment {
   toComment   Comment?  @relation("CommentToComment", fields: [toCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies     Comment[] @relation("CommentToComment")
 
-  likes LikeComment[]
+  likes         Like[]
+  bookmarks     Bookmark[]
+  notifications Notification[]
+  fromUser      Notification[] @relation("CommentToComment")
 
   @@index([userId])
   @@index([toCommentId])
+  @@index([threadId])
 }
 
 model Genre {
@@ -121,19 +128,7 @@ model Genre {
   threads Thread[]
 }
 
-model BookmarkedThread {
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  threadId  Int
-  thread    Thread   @relation(fields: [threadId], references: [id])
-  createdAt DateTime @default(now())
-
-  @@id([userId, threadId])
-  @@index([userId])
-  @@index([threadId])
-}
-
-model LikeComment {
+model Bookmark {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   commentId Int
@@ -143,4 +138,44 @@ model LikeComment {
   @@id([userId, commentId])
   @@index([userId])
   @@index([commentId])
+}
+
+model Like {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  commentId Int
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([userId, commentId])
+  @@index([userId])
+  @@index([commentId])
+}
+
+enum NotificationType {
+  LIKE
+  REPLY
+  ANNOUNCEMENT
+}
+
+model Notification {
+  id         Int              @id @default(autoincrement())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  commentId  Int?
+  comment    Comment?         @relation(fields: [commentId], references: [id])
+  fromUserId String?
+  fromUser   User?            @relation("FromUser", fields: [fromUserId], references: [id])
+  replyId    Int?
+  reply      Comment?         @relation("CommentToComment", fields: [replyId], references: [id])
+  type       NotificationType
+  url        String?
+  body       String?
+  createdAt  DateTime         @default(now())
+  isRead     Boolean          @default(false)
+
+  @@index([userId])
+  @@index([commentId])
+  @@index([fromUserId])
+  @@index([replyId])
 }
