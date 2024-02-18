@@ -4,7 +4,7 @@ import NotificationCard from "./NotificationCard";
 
 const NotificationCardList: React.FC<{notifications: ListNotificationsResponseType}> = ({notifications}) => {
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col gap-2 pb-10">
       {notifications.map((notification) => (
         <NotificationCard key={`nc_${notification.id}`} {...notification} />
       ))}
