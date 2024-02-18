@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { CreateThreadRequestType, CreateThreadResponseType, CreateCommentRequestType, CreateCommentResponseType, CreateLikeRequestType, CreateLikeResponseType, DeleteLikeRequestType, DeleteLikeResponseType, CreateBookmarkRequestType, DeleteBookmarkRequestType } from "@/lib/schema";
+import { CreateCommentRequestType, CreateCommentResponseType } from '../schema/comment';
+import { CreateThreadRequestType, CreateThreadResponseType } from '../schema/thread';
+import { CreateLikeRequestType, CreateLikeResponseType, DeleteLikeRequestType, DeleteLikeResponseType } from '../schema/like';
+import { CreateBookmarkRequestType, DeleteBookmarkRequestType } from '../schema/bookmark';
 
 export async function createComment(data: CreateCommentRequestType): Promise<CreateCommentResponseType | null> {
   const res = await axios.post(
