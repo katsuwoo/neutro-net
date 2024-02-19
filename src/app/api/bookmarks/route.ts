@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { validate } from '@/lib/validation';
 import { ErrorResponseType, handleApiError } from '@/lib/errors';

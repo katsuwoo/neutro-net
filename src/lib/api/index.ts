@@ -1,14 +1,38 @@
 import axios from 'axios';
-import { CreateCommentRequestType, CreateCommentResponseType } from '../schema/comment';
-import { CreateThreadRequestType, CreateThreadResponseType } from '../schema/thread';
+import { CreateCommentRequestType, CreateCommentResponseType, ListCommentsRequestType, ListCommentsResponseType } from '../schema/comment';
+import { ListThreadsRequestType, ListThreadsResponseType, CreateThreadRequestType, CreateThreadResponseType } from '../schema/thread';
 import { CreateLikeRequestType, CreateLikeResponseType, DeleteLikeRequestType, DeleteLikeResponseType } from '../schema/like';
 import { CreateBookmarkRequestType, DeleteBookmarkRequestType } from '../schema/bookmark';
+import { ListNotificationsRequestType, ListNotificationsResponseType } from '../schema/notification';
+import { PatchMeRequestType } from '../schema/user';
+
+export async function patchMe(data: PatchMeRequestType): Promise<boolean> {
+  const res = await axios.patch(
+    "/api/users/me", data
+  )
+  if (res.status !== 200) {
+    return false
+  } else {
+    return true
+  }
+}
 
 export async function createComment(data: CreateCommentRequestType): Promise<CreateCommentResponseType | null> {
   const res = await axios.post(
     "/api/comments", data
   )
   if (res.status !== 201) {
+    return null
+  } else {
+    return res.data
+  }
+}
+
+export async function listThreads(data: ListThreadsRequestType): Promise<ListThreadsResponseType | null> {
+  const res = await axios.get(
+    "/api/threads", { params: data }
+  )
+  if (res.status !== 200) {
     return null
   } else {
     return res.data
@@ -67,5 +91,27 @@ export async function deleteBookmark(data: DeleteBookmarkRequestType): Promise<b
     return false
   } else {
     return true
+  }
+}
+
+export async function listComments(data: ListCommentsRequestType): Promise<ListCommentsResponseType | null> {
+  const res = await axios.get(
+    "/api/comments", { params: data }
+  )
+  if (res.status !== 200) {
+    return null
+  } else {
+    return res.data
+  }
+}
+
+export async function listNotifications(data: ListNotificationsRequestType): Promise<ListNotificationsResponseType | null> {
+  const res = await axios.get(
+    "/api/notifications", { params: data }
+  )
+  if (res.status !== 200) {
+    return null
+  } else {
+    return res.data
   }
 }

@@ -9,6 +9,14 @@ import Link from "next/link";
 import SignOutSpan from "@/components/SignOutSpan";
 import Image from "next/image";
 
+const MoveToCommunityButton: React.FC = () => {
+  return (
+    <Link href="/threads" className="bg-sub-blue hover:bg-main-blue text-white font-bold py-2 px-4 rounded">
+      コミュニティサイトへ移動
+    </Link>
+  );
+}
+
 const TopPageComponent: React.FC = async() => {
   const session = await getServerSession(authOptions);
   return (
@@ -31,9 +39,7 @@ const TopPageComponent: React.FC = async() => {
             </div>
             <div className="flex gap-4 justify-center mt-8">
               {
-                session ? <Link href="/threads" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  コミュニティサイトへ移動
-                </Link> : <>
+                session ? <MoveToCommunityButton /> : <>
                   <SigninButton body="早速参加してみる" />
                 </>
               }
@@ -79,7 +85,8 @@ const AboutAndPainSection: React.FC = () => {
 }
 
 
-const ConcernsSection: React.FC = () => {
+const ConcernsSection: React.FC = async () => {
+  const session = await getServerSession(authOptions);
   return (
     <Container>
       <div className={`flex flex-col gap-4 justify-center items-center max-w-screen-lg py-2 pb-10 px-3 w-full`}>
@@ -103,7 +110,8 @@ const ConcernsSection: React.FC = () => {
           年収によるフィルタリングで、本質的な議論のできるコミュニティを実現
         </div>
         <div className="mt-6">
-          <SigninButton body="年収800万円以上です" />
+          {session ? <MoveToCommunityButton /> : <SigninButton body="年収800万円以上です" />}
+          
         </div>
         {/* （なんかサクラで投稿してキャプチャ貼りたい、ここに挿絵） */}
       </div>
@@ -196,9 +204,7 @@ const Feature3Section: React.FC = async () => {
         </div>
       </div>
       {
-        session ? <Link href="/threads" className="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          コミュニティサイトへ移動
-        </Link> : <>
+        session ? <MoveToCommunityButton /> : <>
         </>
       }
     </Container>

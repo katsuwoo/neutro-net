@@ -3,45 +3,46 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
+import { SALARY_RANGES, JOB_CATEGORIES, BUSINESS_TYPES } from "@/constants";
+import BusinessTypeDropdown from "../BusinessTypeDropdown";
+import JobCategoryDropdown from "../JobCategoryDropdown";
+import NameInput from "../NameInput";
 
 const ProfilePageComponent: React.FC = async () => {
   const session = await getServerSession(authOptions);
   if (!session || session.user.salary === null) {
     redirect("/");
   }
+  const sr = SALARY_RANGES.find((sr) => sr.id === session.user.salary!.sr)!;
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       id: session.user.id,
+      salaryRangeId: session.user.salary.sr,
     },
-  });
-  const sr = await prisma.salaryRange.findUniqueOrThrow({
-    where: {
-      id: session.user.salary.sr,
-    },
+    select: {
+      name: true,
+      jobCategoryId: true,
+      businessTypeId: true,
+      email: true,
+    }
   });
   return (
     <div className="flex flex-col pb-10">
       <div className="flex flex-col gap-2">
         <h1 className="text-xl border-b-2 p-2">プロフィール</h1>
-        <div className="flex flex-col p-2 gap-3">
+        <div className="flex flex-col p-2 gap-5">
           <p>ID: {session.user.id}</p>
           <div>
             <p>名前</p>
-            <div className="flex gap-2" >
-              <input type="text" value={user.name} className="border-2 border-grzay-300 rounded-lg py-1 px-2" />
-              <button className="border-2 border-blue-300 rounded-lg py-1 px-2" >
-                変更
-              </button>
-            </div>
+            <NameInput initialValue={user.name} />
+          </div>
+          <div>
+            <p>業種</p>
+            <BusinessTypeDropdown initialSelected={user.businessTypeId} />
           </div>
           <div>
             <p>職種</p>
-            <div className="flex gap-2" >
-              <input type="text" value={"エンジニア"} className="border-2 border-grzay-300 rounded-lg py-1 px-2" />
-              <button className="border-2 border-blue-300 rounded-lg py-1 px-2" >
-                変更
-              </button>
-            </div>
+            <JobCategoryDropdown initialSelected={user.jobCategoryId} />
           </div>
           <div>
             <p>Email</p>

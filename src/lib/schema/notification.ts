@@ -10,7 +10,6 @@ export type NotificationComponentType = {
 }
 
 export const listNotificationsSchema = z.object({
-  userId: z.string().min(1),
   prevId: z.number().int().min(0).optional(),
 })
 

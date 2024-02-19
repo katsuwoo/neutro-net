@@ -5,7 +5,6 @@ import Modal from "./Modal";
 import GenreDropdown from "./GenreDropdown";
 import NoteDiv from "./NoteDiv";
 import { TITLE_LENGTH } from "@/constants";
-import { useRouter } from "next/navigation";
 import { createComment, createThread } from "@/lib/api";
 
 const CreatePost: React.FC<{
@@ -26,7 +25,6 @@ const CreatePost: React.FC<{
   const [errorForContent, setErrorForContent] = React.useState<string>("");
 
   const formRef = React.useRef<HTMLFormElement | null>();
-  const router = useRouter();
 
   const checkValidityFunc = (
     validity: ValidityState, 

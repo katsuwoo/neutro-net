@@ -1,14 +1,27 @@
 import {NextRequest, NextResponse} from 'next/server'
-import { CreateThreadResponseType, createThreadSchema } from '@/lib/schema/thread'
+import { listThreadsSchema, ListThreadsResponseType, CreateThreadResponseType, createThreadSchema } from '@/lib/schema/thread'
 import { ErrorResponseType, handleApiError } from '@/lib/errors'
 import { validate } from '@/lib/validation'
-import { createThread } from '@/lib/db/thread'
+import { listThreads, createThread } from '@/lib/db/thread'
+
+export async function GET(request: NextRequest): Promise<NextResponse<ListThreadsResponseType | ErrorResponseType>> {
+  try {
+    const { user, data } = await validate(await request.nextUrl.searchParams, listThreadsSchema)
+    return NextResponse.json(
+      await listThreads({userId: user.id, salaryRangeId: user.salary.sr, prevId: data.prevId}), 
+      {status: 200}
+    )
+
+  } catch (error) {
+    return handleApiError({error})
+  }
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse<CreateThreadResponseType | ErrorResponseType>> {
   try {
     const { user, data } = await validate(await request.json(), createThreadSchema)
     return NextResponse.json(
-      await createThread({data, userId: user.id, salaryRangeId: user.salary.sr}), 
+      await createThread({...data, userId: user.id, salaryRangeId: user.salary.sr}), 
       {status: 201}
     )
 

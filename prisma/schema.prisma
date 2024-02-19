@@ -51,7 +51,6 @@ model User {
   name          String
   email         String    @unique
   emailVerified DateTime?
-
   image         String?
   accounts      Account[]
   sessions      Session[]
@@ -62,6 +61,11 @@ model User {
   salary        Int?
   salaryRangeId String?
   salaryRange   SalaryRange? @relation(fields: [salaryRangeId], references: [id])
+  businessTypeId Int?
+  businessType   BusinessType? @relation(fields: [businessTypeId], references: [id])
+  jobCategoryId Int?
+  jobCategory   JobCategory? @relation(fields: [jobCategoryId], references: [id])
+  birthYear     Int?
 
   comments      Comment[]
   likes         Like[]
@@ -70,15 +74,32 @@ model User {
   fromUser      Notification[] @relation("FromUser")
 
   @@index([salaryRangeId])
+  @@index([businessTypeId])
+  @@index([jobCategoryId])
+}
+
+model BusinessType {
+  id   Int    @id
+  name String
+
+  users User[]
+}
+
+model JobCategory {
+  id   Int    @id
+  name String
+
+  users User[]
 }
 
 model SalaryRange {
-  id  String @id @default(cuid())
+  id  String @id
   min Int
   max Int?
 
   threads Thread[]
   users   User[]
+  comments Comment[]
 }
 
 model Thread {
@@ -104,6 +125,8 @@ model Comment {
   threadId  Int
   thread    Thread   @relation(fields: [threadId], references: [id])
   body      String
+  salaryRangeId String
+  salaryRange   SalaryRange @relation(fields: [salaryRangeId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -119,6 +142,7 @@ model Comment {
   @@index([userId])
   @@index([toCommentId])
   @@index([threadId])
+  @@index([salaryRangeId])
 }
 
 model Genre {

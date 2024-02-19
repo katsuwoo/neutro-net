@@ -1,44 +1,68 @@
+import { NOTIFICATIONS_LIMIT } from "@/constants";
 import prisma from "../prisma";
+import { ListNotificationsResponseType } from "../schema/notification";
 
 export const listNotifications = async (req: {
-  userId: string
-}) => {
-  const { userId } = req
-  const res = await prisma.notification.findMany({
+  userId: string,
+  prevId?: number,
+}): Promise<ListNotificationsResponseType> => {
+  const { userId, prevId } = req
+  const notifications: ListNotificationsResponseType = await prisma.notification.findMany({
     where: {
-      userId: userId
+      userId: userId,
+      id: prevId ? {
+        lt: prevId
+      } : undefined
     },
     orderBy: {
-      createdAt: "desc"
+      id: "desc",
     },
+    take: NOTIFICATIONS_LIMIT,
     select: {
       id: true,
-      type: true,
       comment: {
         select: {
           body: true,
-        }
+        },
+      },
+      body: true,
+      reply: {
+        select: {
+          body: true,
+        },
       },
       fromUser: {
         select: {
           name: true,
-        }
+        },
       },
-      reply: {
-        select: {
-          body: true,
-        }
-      },
+      type: true,
+      isRead: true,
       url: true,
-      createdAt: true,
-    }
+    },
   }).then((res) => {
-    return res.map((notification) => ({
-      ...notification,
-      date: notification.createdAt.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })
-    }));
+    return res.reduce((acc: ListNotificationsResponseType, notification) => {
+      if (notification.type === "LIKE" && notification.fromUser && notification.comment && notification.url) {
+        acc.push({
+          id: notification.id,
+          type: notification.type,
+          message: `${notification.fromUser.name}さんがあなたのコメントにいいねしました`,
+          quote: notification.comment.body.length > 50 ? notification.comment.body.replace(/\n/g, " ").substring(0, 50) + "..." : notification.comment.body.replace(/\n/g, " "),
+          url: notification.url
+        });
+      } else if (notification.type === "REPLY" && notification.fromUser && notification.reply && notification.url) {
+        acc.push({
+          id: notification.id,
+          type: notification.type,
+          message: `${notification.fromUser.name}さんがあなたのコメントに返信しました`,
+          quote: notification.reply.body.length > 50 ? notification.reply.body.replace(/\n/g, " ").substring(0, 50) + "..." : notification.reply.body.replace(/\n/g, " "),
+          url: notification.url
+        });
+      }
+      return acc;
+    }, []);
   })
-  return res
+  return notifications
 }
 
 export const createLikeNotification = async (req: {

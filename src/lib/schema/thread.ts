@@ -1,25 +1,23 @@
-import { CONTENT_LENGTH, TITLE_LENGTH } from "@/constants";
+import { COMMENT_LENGTH, TITLE_LENGTH } from "@/constants";
 import { z } from "zod";
 import { CommentType } from "./comment";
 
-export type Thread = {
-  id: number;
-  genre: string;
-  title: string;
-  content: string;
-  author: string;
-  date: string;
-  likes: number;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  comments: number;
-  commentList: CommentType[];
-}
+export const listThreadsSchema = z.object({
+  prevId: z.number().optional(),
+  genre: z.number().int().min(1).optional(),
+  bookmarked: z.boolean().optional()
+})
+
+export type ListThreadsRequestType = z.infer<
+  typeof listThreadsSchema
+>
+
+export type ListThreadsResponseType = CommentType[]
 
 export const createThreadSchema = z.object({
   title: z.string().min(1).max(TITLE_LENGTH),
   genre: z.number().int().min(0).max(999),
-  content: z.string().min(1).max(CONTENT_LENGTH)
+  content: z.string().min(1).max(COMMENT_LENGTH)
 })
 
 export type CreateThreadRequestType = z.infer<
