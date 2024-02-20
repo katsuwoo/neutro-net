@@ -26,7 +26,7 @@ const GenreForSearchDropdown: React.FC<GenreDropdownProps> = ({ selected, setSel
         value={selected !== undefined ? selected : -1}
         className="
           block bg-white border-[1px]  rounded-xl
-          p-2 pr-4 focus:outline-none 
+          p-1 pr-4 focus:outline-none 
         "
         onChange={(e) => {
           const selectedValue = parseInt(e.target.value);

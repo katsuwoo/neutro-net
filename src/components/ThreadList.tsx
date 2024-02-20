@@ -1,16 +1,21 @@
 'use client';
 
-import React,{ useEffect, useRef, useState }  from 'react';
+import React,{ use, useEffect, useRef, useState }  from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Comment from './Comment';
 import { CommentType } from '@/lib/schema/comment';
-import { useInView } from '@/lib/hooks';
+import { useInView } from '@/hooks/useInView';
 import { listThreads } from '@/lib/api';
 import { THREADS_LIMIT } from '@/constants';
 import GenreForSearchDropdown from './GenreForSearchDropdown';
 import LoadingCircle from './LoadingCircle';
+import { stringify } from 'qs';
 
-const ThreadList: React.FC<{comments: CommentType[], genre: number | undefined}> = (props) => {
+const ThreadList: React.FC<{
+  comments: CommentType[], 
+  genre: number | undefined,
+  bookmarked: boolean | undefined
+}> = (props) => {
   const [genre, setGenre] = useState<number | undefined>(props.genre);
   const [comments, setComments] = useState<CommentType[]>(props.comments);
   const [isFetching, setIsFetching] = useState(false);
@@ -29,14 +34,20 @@ const ThreadList: React.FC<{comments: CommentType[], genre: number | undefined}>
   }, [props.comments]);
 
   useEffect(() => {
+    setGenre(props.genre);
+  }, [props.genre]);
+
+  useEffect(() => {
     const paramgenre = paramGenre !== null ? parseInt(paramGenre) : undefined;
     // the paramgenre and the genre are same when the page is opened.
     // Otherwise, they are different when the dropdown is changed.
     if (paramgenre !== genre) {
-      router.push(genre !== undefined ? `${pathname}?genre=${genre}` : pathname, {scroll: false});
       setIsLoading(true);
       setComments([]);
       setAllFetched(true);
+      const query = stringify({genre});
+      const path = query.length > 0 ? `${pathname}?${query}` : pathname;
+      router.push(path, {scroll: false});
     }
   }, [genre]);
 
@@ -54,6 +65,7 @@ const ThreadList: React.FC<{comments: CommentType[], genre: number | undefined}>
       listThreads({
         prevId: prevId,
         genre: genre,
+        bookmarked: props.bookmarked
       }).then((res) => {
         console.log(res)
         if (res !== null) {
@@ -79,6 +91,7 @@ const ThreadList: React.FC<{comments: CommentType[], genre: number | undefined}>
   
   return (
     <div>
+      {props.bookmarked && <h1 className='text-xl p-3 border-b-2 text-main-blue'>ブックマークしたスレッド</h1>}
       <GenreForSearchDropdown selected={genre} setSelected={setGenre} />
       <ul>
           {comments.map((comment) => (

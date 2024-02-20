@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ListNotificationsResponseType } from "@/lib/schema/notification";
 import NotificationCard from "./NotificationCard";
 import { NOTIFICATIONS_LIMIT } from "@/constants";
-import { useInView } from '@/lib/hooks';
+import { useInView } from '@/hooks/useInView';
 import { listNotifications } from "@/lib/api";
 
 const NotificationCardList: React.FC<{notifications: ListNotificationsResponseType}> = (props) => {

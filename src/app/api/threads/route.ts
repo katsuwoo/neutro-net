@@ -8,7 +8,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ListThread
   try {
     const { user, data } = await validate(await request.nextUrl.searchParams, listThreadsSchema)
     return NextResponse.json(
-      await listThreads({userId: user.id, salaryRangeId: user.salary.sr, prevId: data.prevId}), 
+      await listThreads({userId: user.id, salaryRangeId: user.salary.sr, ...data}), 
       {status: 200}
     )
 

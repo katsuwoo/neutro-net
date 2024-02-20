@@ -15,7 +15,7 @@ const ThreadsPage: NextPage<{
   return (
     <Suspense fallback={<FullScreenLoading />}>
       <Layout>
-        <ThreadsPageComponent genre={genre} />
+        <ThreadsPageComponent genre={genre} bookmarked={true} />
       </Layout>
     </Suspense>
   );

@@ -6,14 +6,18 @@ export const listThreads = async (req: {
   userId: string,
   salaryRangeId: string
 } & ListThreadsRequestType): Promise<ListThreadsResponseType> => {
-  const { userId, prevId, salaryRangeId, genre } = req
-  const hoge = {
-    salaryRangeId: salaryRangeId,
-    genreId: genre
-  }
+  const { userId, prevId, salaryRangeId, genre, bookmarked } = req
   const res = await prisma.comment.findMany({
     where: {
-      thread: hoge,
+      thread: {
+        salaryRangeId: salaryRangeId,
+        genreId: genre
+      },
+      bookmarks: bookmarked === true ? {
+        some: {
+          userId: userId
+        }
+      } : undefined,
       toCommentId: null,
       id: prevId ? {
         lt: prevId

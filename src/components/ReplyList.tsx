@@ -4,7 +4,7 @@ import { CommentType } from "@/lib/schema/comment";
 import React, { useEffect, useRef, useState } from "react";
 import Comment from "@/components/Comment";
 import { COMMENTS_LIMIT } from "@/constants";
-import { useInView } from "@/lib/hooks";
+import { useInView } from "@/hooks/useInView";
 import { listComments } from "@/lib/api";
 
 const ReplyList: React.FC<{toCommentId: number, replyList: CommentType[]}> = (props) => {
