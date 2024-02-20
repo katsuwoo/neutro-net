@@ -5,7 +5,8 @@ import { signIn } from "next-auth/react";
 
 const SigninButton: React.FC<{body: string}> = ({body}) => {
   return (
-    <button className="bg-sub-blue hover:bg-main-blue text-white font-bold py-2 px-4 rounded"
+    <button 
+    className="bg-sub-blue hover:bg-main-blue text-white font-bold py-4 px-8 rounded-3xl"
       onClick={() => {
         signIn(undefined, { callbackUrl: `${window.location.href}threads` });
       }}
