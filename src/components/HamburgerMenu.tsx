@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -22,6 +23,13 @@ const HamburgerMenu = () => {
             className="block px-4 py-2 text-gray-800 hover:bg-main-blue hover:text-white"
             onClick={() => setIsOpen(false)}
           >ブックマーク</Link>
+          <div  
+            className="block px-4 py-2 text-gray-800 hover:bg-main-blue hover:text-white"
+            onClick={() => {
+              setIsOpen(false)
+              signOut();
+            }}
+          >ログアウト</div>
         </div>
       )}
     </div>

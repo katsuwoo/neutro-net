@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/nextauth-options";
 import Link from "next/link";
 import SignOutSpan from "@/components/SignOutSpan";
 import Image from "next/image";
+import Footer from "../Footer";
 
 const MoveToCommunityButton: React.FC = () => {
   return (
@@ -69,9 +70,7 @@ const TopPageComponent: React.FC = async() => {
           <h2 className="text-xl font-bold text-main-blue">ユーザーの声</h2>
           <p className="mt-4">"Neutro Netで、質の高い議論を毎日楽しんでいます。"</p>
       </section> */}
-      <footer className="bg-main-blue text-white text-center p-4">
-          © 2024 NeutroNet. All rights reserved.
-      </footer>
+      <Footer />
     </>
   );
 }
