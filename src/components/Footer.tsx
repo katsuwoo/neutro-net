@@ -15,10 +15,10 @@ const linkList: {
     text: "利用規約",
     href: "/terms-of-service.pdf"
   },
-  // {
-  //   text: "コミュニティガイドライン",
-  //   href: "/community-guidelines"
-  // },
+  {
+    text: "コミュニティガイドライン",
+    href: "/community-guidelines"
+  },
   {
     text: "問い合わせ",
     href: "https://docs.google.com/forms/d/e/1FAIpQLSdz_0oJ_I2XVIqB1z_1M_JsjEvUMtjU5Bxd0Cm8QMHIACCFcA/viewform",
