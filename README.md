@@ -38,3 +38,33 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Directory Structure
 
 https://zenn.dev/brachio_takumi/articles/5af43549cdc4e0
+
+## Copy to katsuwoo
+
+```
+origin=$(pwd)
+cd ~/workspace/anti-bias-sns
+rm -rf src
+rm -rf public
+cp ~/workspace/neutro-net/yarn.lock .
+cp ~/workspace/neutro-net/tsconfig.json .
+cp ~/workspace/neutro-net/package.json .
+cp ~/workspace/neutro-net/tailwind.config.ts .
+cp ~/workspace/neutro-net/prisma/schema.prisma ./prisma/
+cp -r ~/workspace/neutro-net/src .
+cp -r ~/workspace/neutro-net/public .
+git add .
+git commit -m "update"
+git push
+cd $origin
+```
+
+## Create a secret for NextAuth
+
+```
+openssl rand -base64 32
+```
+
+## Naming Conventions
+
+https://restfulapi.net/resource-naming/
