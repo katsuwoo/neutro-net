@@ -6,7 +6,8 @@ import { listThreads, createThread } from '@/lib/db/thread'
 
 export async function GET(request: NextRequest): Promise<NextResponse<ListThreadsResponseType | ErrorResponseType>> {
   try {
-    const { user, data } = await validate(await request.nextUrl.searchParams, listThreadsSchema)
+    const params = Object.fromEntries(request.nextUrl.searchParams)
+    const { user, data } = await validate(params, listThreadsSchema)
     return NextResponse.json(
       await listThreads({userId: user.id, salaryRangeId: user.salary.sr, ...data}), 
       {status: 200}

@@ -29,11 +29,11 @@ const TopPageComponent: React.FC = async() => {
         <div className="flex flex-col justigy-center items-center z-20 text-white relative">
           <div className="flex justify-between p-4 w-full max-w-screen-md box-border">
             {/* <span className="text-xl font-bold">NeutroNet</span> */}
-            <Image src="/whitefontlogo.png" alt="NeutroNet" width={100} height={15} />
-            {/* <Image src="/whitelogo.png" alt="NeutroNet" width={125} height={25} /> */}
+            <Image src="/whitefontlogo.webp" alt="NeutroNet" width={100} height={15} />
+            {/* <Image src="/whitelogo.webp" alt="NeutroNet" width={125} height={25} /> */}
             {session ? <SignOutSpan /> : <></>}
           </div>
-          <Image src="/whitelogo.png" alt="NeutroNet" width={200} height={30} className="mt-10 mb-7"/>
+          <Image src="/whitelogo.webp" alt="NeutroNet" width={200} height={30} className="mt-10 mb-7"/>
           <div className="flex flex-col justify-center items-center w-full max-w-screen-md p-8 pt-0">
             <div className="mb-10 text-3xl font-bold">
               <span className="underline decoration-sub-yellow decoration-4">年収800万円以上限定</span>

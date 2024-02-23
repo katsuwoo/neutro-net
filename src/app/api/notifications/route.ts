@@ -6,7 +6,8 @@ import { listNotifications } from '@/lib/db/notification'
 
 export async function GET(request: NextRequest): Promise<NextResponse<ListNotificationsResponseType | ErrorResponseType>> {
   try {
-    const { user, data } = await validate(await request.nextUrl.searchParams, listNotificationsSchema)
+    const params = Object.fromEntries(request.nextUrl.searchParams)
+    const { user, data } = await validate(params, listNotificationsSchema)
     return NextResponse.json(
       await listNotifications({userId: user.id, prevId: data.prevId}), 
       {status: 200}

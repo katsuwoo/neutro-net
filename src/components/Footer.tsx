@@ -12,6 +12,10 @@ const linkList: {
     href: "/privacy-policy.pdf"
   },
   {
+    text: "Cookie (クッキー) ポリシー",
+    href: "/cookie-policy.pdf"
+  },
+  {
     text: "利用規約",
     href: "/terms-of-service.pdf"
   },

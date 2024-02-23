@@ -9,7 +9,8 @@ export async function GET(request: NextRequest): Promise<
   NextResponse<ListCommentsResponseType | ErrorResponseType>
 > {
   try {
-    const {user, data} = await validate(request.nextUrl.searchParams, listCommentsSchema)
+    const params = Object.fromEntries(request.nextUrl.searchParams)
+    const {user, data} = await validate(params, listCommentsSchema)
     const res = await listComments({userId: user.id, toCommentId: data.toCommentId, prevId: data.prevId, salaryRangeId: user.salary.sr})
     return NextResponse.json(
       res,

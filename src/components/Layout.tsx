@@ -32,7 +32,7 @@ const Layout: React.FC<PropsWithChildren > = async ({ children }) => {
           <div className="flex justify-between px-4 py-3">
             {/* <h1 className='text-xl'>NeutroNet</h1> */}
             <Link href="/threads">
-              <Image src="/bluelogo.png" alt="NeutroNet" width={150} height={30} />
+              <Image src="/bluelogo.webp" alt="NeutroNet" width={150} height={30} />
             </Link>
             <div className='flex gap-4 justify-end'>
               <NotificationBell count={notificationCount} />
