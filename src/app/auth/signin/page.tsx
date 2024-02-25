@@ -10,7 +10,7 @@ export default async function SignIn() {
   const session = await getServerSession(authOptions)
 
   const providers = await getProviders()
-  if (session || !providers) {
+  if (!session || !providers) {
     redirect("/")
   }
 
