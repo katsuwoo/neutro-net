@@ -10,7 +10,7 @@ export default async function SignIn() {
   const session = await getServerSession(authOptions)
   const providers = await getProviders()
 
-  if (session || !providers) {
+  if (session) {
     redirect("/")
   }
 
@@ -22,7 +22,7 @@ export default async function SignIn() {
           アカウントがない状態でログインを行うとユーザー情報が新規登録されます。<br />
           <TermsOfServiceSpan /> および <PrivacyPolicySpan /> をご確認いただき、同意いただける場合のみログインを行ってください。
         </div>
-        {Object.values(providers).map((provider) => (
+        {providers && Object.values(providers).map((provider) => (
           <div key={provider.name}>
             <FederatedSignInButton provider={provider} />
           </div>
