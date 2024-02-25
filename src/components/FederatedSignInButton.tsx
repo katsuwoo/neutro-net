@@ -9,7 +9,7 @@ export const FederatedSignInButton: React.FC<{id: string, name: string}> = ({ id
   return (
     <div key={name}>
       <button 
-        onClick={() => signIn(id)} 
+        onClick={() => signIn(id, { callbackUrl: '/threads' })} 
         className='flex items-center gap-2 border-[2px] p-2 rounded-md hover:bg-gray-200'>
         {id === 'google' && 
           <GoogleIcon />
