@@ -46,11 +46,9 @@ origin=$(pwd)
 cd ~/workspace/anti-bias-sns
 rm -rf src
 rm -rf public
-cp ~/workspace/neutro-net/yarn.lock .
-cp ~/workspace/neutro-net/tsconfig.json .
-cp ~/workspace/neutro-net/package.json .
-cp ~/workspace/neutro-net/tailwind.config.ts .
-cp ~/workspace/neutro-net/prisma/schema.prisma ./prisma/
+rm -rf prisma
+cp ~/workspace/neutro-net/* .
+cp -r ~/workspace/neutro-net/prisma .
 cp -r ~/workspace/neutro-net/src .
 cp -r ~/workspace/neutro-net/public .
 git add .

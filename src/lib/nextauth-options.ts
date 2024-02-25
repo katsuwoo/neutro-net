@@ -11,12 +11,18 @@ export const authOptions: NextAuthOptions = {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: { scope: "email" }
+      }
     }),
-    Facebook({
-      clientId: process.env.FACEBOOK_CLIENT_ID || "",
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
-    })
+    // Facebook({
+    //   clientId: process.env.FACEBOOK_CLIENT_ID || "",
+    //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
+    // })
   ],
+  pages: {
+    signIn: "/auth/signin",
+  },
   adapter: {
     ...PrismaAdapter(prisma),
     createUser: async ({...data}) => {
