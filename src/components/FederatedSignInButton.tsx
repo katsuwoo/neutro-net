@@ -5,16 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { ClientSafeProvider, signIn } from 'next-auth/react';
 
-export const FederatedSignInButton: React.FC<{provider: ClientSafeProvider}> = ({ provider }) => {
+export const FederatedSignInButton: React.FC<{id: string, name: string}> = ({ id, name }) => {
   return (
-    <div key={provider.name}>
+    <div key={name}>
       <button 
-        onClick={() => signIn(provider.id)} 
-        className='flex items-center gap-2 border-[2px] p-2 rounded-md'>
-        {provider.id === 'google' && 
+        onClick={() => signIn(id)} 
+        className='flex items-center gap-2 border-[2px] p-2 rounded-md hover:bg-gray-200'>
+        {id === 'google' && 
           <GoogleIcon />
         }
-        <span className='text-lg'>{provider.name}でログイン</span>
+        <span className='text-lg'>{name}でログイン</span>
       </button>
     </div>
   );

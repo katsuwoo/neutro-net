@@ -1,4 +1,4 @@
-import { getProviders } from "next-auth/react"
+// import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/nextauth-options"
 import { redirect } from "next/navigation"
@@ -8,7 +8,8 @@ import Link from "next/link"
 
 export default async function SignIn() {
   const session = await getServerSession(authOptions)
-  const providers = await getProviders()
+  // Cannot work correctly
+  // const providers = await getProviders()
 
   if (session) {
     redirect("/")
@@ -22,11 +23,9 @@ export default async function SignIn() {
           アカウントがない状態でログインを行うとユーザー情報が新規登録されます。<br />
           <TermsOfServiceSpan /> および <PrivacyPolicySpan /> をご確認いただき、同意いただける場合のみログインを行ってください。
         </div>
-        {providers && Object.values(providers).map((provider) => (
-          <div key={provider.name}>
-            <FederatedSignInButton provider={provider} />
-          </div>
-        ))}
+        <div key={"google"}>
+          <FederatedSignInButton id="google" name="Google" />
+        </div>
       </div>
     </div>
   )
