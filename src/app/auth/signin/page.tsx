@@ -12,19 +12,19 @@ export default async function SignIn() {
   // const providers = await getProviders()
 
   if (session) {
-    redirect("/")
+    redirect("/threads")
   }
 
   return (
     <div className='w-screen h-screen flex flex-col justify-center items-center'>
       <div className='border-main-blue border-2 rounded-xl flex flex-col justify-center items-center m-4 p-4 gap-4'>
         <Image src="/bluelogo.webp" alt="NeutroNet" width={150} height={30} />
+        <div key={"google"}>
+          <FederatedSignInButton id="google" name="Google" />
+        </div>
         <div>
           アカウントがない状態でログインを行うとユーザー情報が新規登録されます。<br />
           <TermsOfServiceSpan /> および <PrivacyPolicySpan /> をご確認いただき、同意いただける場合のみログインを行ってください。
-        </div>
-        <div key={"google"}>
-          <FederatedSignInButton id="google" name="Google" />
         </div>
       </div>
     </div>
