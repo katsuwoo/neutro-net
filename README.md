@@ -57,6 +57,18 @@ git push
 cd $origin
 ```
 
+## merge develop into main for katsowoo personal respositoy
+
+```
+origin=$(pwd)
+cd ~/workspace/anti-bias-sns
+git checkout main
+git merge develop --no-ff --no-edit
+git push
+git checkout develop
+cd $origin
+```
+
 ## Create a secret for NextAuth
 
 ```
