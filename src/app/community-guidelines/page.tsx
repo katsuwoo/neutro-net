@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import { Metadata, NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 const title = "コミュニティガイドライン | NeutroNet（ニュートロネット）| 年収800万円以上限定SNS"
 const description = "NeutroNet（ニュートロネット）は、偏った発言や強い批判の無い、多角的・建設的で有意義な情報収集や議論ができるニュートラルなSNSです。年収帯ごとにコミュニティを分けることで、生活水準の近い人同士で効率よく情報を入手できるようにしています。"
@@ -43,7 +44,9 @@ const CommunityGuidelinesPage: NextPage = () => {
         className="flex flex-col items-center align-middle pt-5 pb-16 gap-4"
       >
         <div className="px-2">
-          <Image src="/NeutroNet_logo_googleform.webp" alt="NeutroNet" width={400} height={100} />
+          <Link href="/">
+            <Image src="/NeutroNet_logo_googleform.webp" alt="NeutroNet" width={400} height={100} />
+          </Link>
         </div>
         <div className="w-[calc(100%-40px)] max-w-3xl flex flex-col gap-12">
           <div className="flex flex-col gap-4">
